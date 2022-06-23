@@ -2,12 +2,13 @@
 
 require_once(dirname(__DIR__) . '/vendor/autoload.php');
 
-$looker = new \Alexkart\Looker\Looker(
+$config = new \Alexkart\Looker\Configuration(
     'https://looker-host:19999/api/3.1',
     'client-id',
     'client-secret',
     'optional-access-token'
 );
+$looker = new \Alexkart\Looker\Looker($config);
 
 $looks = $looker->lookApi->searchLooks(null, 'test');
 var_dump($looks);

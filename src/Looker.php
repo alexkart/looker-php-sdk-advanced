@@ -38,10 +38,6 @@ use Swagger\Client\Configuration;
  * @property Api\WorkspaceApi workspaceApi
  */
 class Looker {
-    private string $host;
-    private string $clientId;
-    private string $clientSecret;
-    private string $accessToken;
     /**
      * @var void
      */
@@ -49,37 +45,34 @@ class Looker {
     /**
      * @var void
      */
-    private $config;
-    private bool $accessTokenRenewed = false;
+    private $apiConfig;
+    private \Alexkart\Looker\Configuration $config;
 
-    public function __construct(string $host, string $clientId, string $clientSecret, string $accessToken = '') {
-        $this->host = $host;
-        $this->clientId = $clientId;
-        $this->clientSecret = $clientSecret;
-        $this->accessToken = $accessToken ?: $this->loadAccessToken();
+    public function __construct(\Alexkart\Looker\Configuration $config) {
+        $this->config = $config;
         $this->login();
     }
 
     public function __get(string $name) {
         $class = '\\Alexkart\\Looker\\' . ucfirst($name);
 
-        return new $class($this, $this->authenticatedClient, $this->config);
+        return new $class($this, $this->authenticatedClient, $this->apiConfig);
     }
 
     public function login(): void {
-        $this->config = new Configuration();
-        $this->config->setHost($this->host);
+        $this->apiConfig = new Configuration();
+        $this->apiConfig->setHost($this->config->getHost());
 
-        if ($this->accessToken === '') {
+        if ($this->config->getAccessToken() === '') {
             $apiInstance = new ApiAuthApi(
                 new Client(),
-                $this->config
+                $this->apiConfig
             );
 
             try {
-                $result = $apiInstance->login($this->clientId, $this->clientSecret);
-                $this->accessToken = $result->getAccessToken();
-                $this->accessTokenRenewed = true;
+                $result = $apiInstance->login($this->config->getClientId(), $this->config->getClientSecret());
+                $this->config->setAccessToken($result->getAccessToken());
+                $this->config->setAccessTokenRenewed(true);
             } catch (Exception $e) {
                 echo 'Exception when calling ApiAuthApi->login: ', $e->getMessage(), PHP_EOL;
             }
@@ -88,34 +81,27 @@ class Looker {
         $this->authenticatedClient = new Client([
             'verify' => false,
             'headers' => [
-                'Authorization' => 'token ' . $this->accessToken,
+                'Authorization' => 'token ' . $this->config->getAccessToken(),
             ],
         ]);
 
-        if ($this->accessTokenRenewed) {
-            $this->storeAccessToken($this->accessToken);
+        if ($this->config->isAccessTokenRenewed()) {
+            $this->config->storeAccessToken($this->config->getAccessToken());
         }
     }
 
     public function invalidateAccessToken(): void {
-        $this->accessToken = '';
+        $this->config->setAccessToken('');
     }
 
     public function getAuthenticatedClient() {
         return $this->authenticatedClient;
     }
 
-    protected function storeAccessToken($accessToken): void {
-    }
-
-    protected function loadAccessToken(): string {
-        return '';
-    }
-
     /**
      * @return string
      */
     public function getAccessToken(): string {
-        return $this->accessToken;
+        return $this->config->getAccessToken();
     }
 }
