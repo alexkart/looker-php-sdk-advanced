@@ -1,0 +1,10 @@
+{
+    "autoload": {
+        "psr-4": {
+            "Alexkart\\Looker\\": "src/"
+        }
+    },
+    "require": {
+        "alexkart/looker-php-sdk": "^0.1.0"
+    }
+}
