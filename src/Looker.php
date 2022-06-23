@@ -50,12 +50,13 @@ class Looker {
      * @var void
      */
     private $config;
+    private bool $accessTokenRenewed = false;
 
     public function __construct(string $host, string $clientId, string $clientSecret, string $accessToken = '') {
         $this->host = $host;
         $this->clientId = $clientId;
         $this->clientSecret = $clientSecret;
-        $this->accessToken = $accessToken;
+        $this->accessToken = $accessToken ?: $this->loadAccessToken();
         $this->login();
     }
 
@@ -78,6 +79,7 @@ class Looker {
             try {
                 $result = $apiInstance->login($this->clientId, $this->clientSecret);
                 $this->accessToken = $result->getAccessToken();
+                $this->accessTokenRenewed = true;
             } catch (Exception $e) {
                 echo 'Exception when calling ApiAuthApi->login: ', $e->getMessage(), PHP_EOL;
             }
@@ -89,6 +91,10 @@ class Looker {
                 'Authorization' => 'token ' . $this->accessToken,
             ],
         ]);
+
+        if ($this->accessTokenRenewed) {
+            $this->storeAccessToken($this->accessToken);
+        }
     }
 
     public function invalidateAccessToken(): void {
@@ -97,5 +103,19 @@ class Looker {
 
     public function getAuthenticatedClient() {
         return $this->authenticatedClient;
+    }
+
+    protected function storeAccessToken($accessToken): void {
+    }
+
+    protected function loadAccessToken(): string {
+        return '';
+    }
+
+    /**
+     * @return string
+     */
+    public function getAccessToken(): string {
+        return $this->accessToken;
     }
 }

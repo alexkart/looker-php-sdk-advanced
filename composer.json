@@ -1,7 +1,8 @@
 {
     "autoload": {
         "psr-4": {
-            "Alexkart\\Looker\\": "src/"
+            "Alexkart\\Looker\\": "src/",
+            "App\\": "examples/"
         }
     },
     "require": {
