@@ -26,7 +26,7 @@ abstract class Api {
         $this->initApi();
     }
 
-    protected function initApi() {
+    protected function initApi(): void {
         $apiClass = $this->getApiClassName();
         $this->api = new $apiClass($this->client, $this->config, $this->selector);
     }

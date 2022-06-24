@@ -1,2 +1,3 @@
 /vendor/
 /examples/looker_access_token.txt
+/.phpunit.result.cache
