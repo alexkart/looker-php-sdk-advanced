@@ -95,4 +95,8 @@ class Looker {
 
         return new $class($this, $this->authenticatedClient, $this->apiConfig);
     }
+
+    public function getConfig(): LookerConfiguration {
+        return $this->config;
+    }
 }
