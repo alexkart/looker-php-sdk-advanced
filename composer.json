@@ -8,6 +8,7 @@
         "looker",
         "advanced"
     ],
+    "license": "MIT",
     "autoload": {
         "psr-4": {
             "Alexkart\\Looker\\": "src/",
