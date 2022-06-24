@@ -1,6 +1,8 @@
 <?php
 
-namespace Alexkart\Looker;
+namespace Alexkart\Looker\Api;
+
+use Alexkart\Looker\Api;
 
 class LookApi extends Api {
     protected function getApiClassName(): string {

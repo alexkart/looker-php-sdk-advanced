@@ -91,7 +91,7 @@ class Looker {
     }
 
     public function __get(string $name) {
-        $class = '\\Alexkart\\Looker\\' . ucfirst($name);
+        $class = '\\Alexkart\\Looker\\Api\\' . ucfirst($name);
 
         return new $class($this, $this->authenticatedClient, $this->apiConfig);
     }
