@@ -1,4 +1,13 @@
 {
+    "name": "alexkart/looker-php-sdk-advanced",
+    "description": "Advanced PHP SDK for Looker API",
+    "keywords": [
+        "php",
+        "sdk",
+        "api",
+        "looker",
+        "advanced"
+    ],
     "autoload": {
         "psr-4": {
             "Alexkart\\Looker\\": "src/",
