@@ -1,11 +1,17 @@
 <?php
 
+use Dotenv\Dotenv;
+
 require_once(dirname(__DIR__) . '/vendor/autoload.php');
 
+$dotenv = Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
 $config = new \App\CustomLookerConfiguration(
-    'https://looker-host:19999/api/3.1',
-    'client-id',
-    'client-secret',
+    $_SERVER['LOOKER_HOST'],
+    $_SERVER['LOOKER_CLIENT_ID'],
+    $_SERVER['LOOKER_CLIENT_SECRET'],
+    $_SERVER['LOOKER_ACCESS_TOKEN']
 );
 $looker = new \Alexkart\Looker\Looker($config);
 

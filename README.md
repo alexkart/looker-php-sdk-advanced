@@ -29,7 +29,8 @@ require_once('/path/to/looker-php-sdk-advanced/vendor/autoload.php');
 
 ## Getting Started
 
-See usage examples in the [**examples**](examples) folder.
+See usage examples in the [**examples**](examples) folder. These examples use Looker credentials 
+from the `.env` file, you can create it by copying `.env.example` file.
 
 ### Basic example
 In order to start interacting with the API you just need to instantiate Looker object and provide a
