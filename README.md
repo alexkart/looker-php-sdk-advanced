@@ -38,7 +38,7 @@ config with the Looker host and valid credentials (API client id and API client 
 
 ```php
 $config = new \App\CustomLookerConfiguration(
-    'https://looker-host:19999/api/3.1',
+    'https://looker-host:19999/api/4.0',
     'client-id',
     'client-secret',
 );
@@ -60,7 +60,7 @@ will be used to authenticate requests to the API.
 
 ```php
 $config = new \Alexkart\Looker\LookerConfiguration(
-    'https://looker-host:19999/api/3.1',
+    'https://looker-host:19999/api/4.0',
     '',
     '',
     'access-token'
@@ -71,7 +71,7 @@ $looker = new \Alexkart\Looker\Looker($config);
 You can provide both access token and API credentials:
 ```php
 $config = new \Alexkart\Looker\LookerConfiguration(
-    'https://looker-host:19999/api/3.1',
+    'https://looker-host:19999/api/4.0',
     'client-id',
     'client-secret',
     'optional-access-token'
