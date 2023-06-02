@@ -1,6 +1,6 @@
 # Looker PHP SDK Advanced
 
-API version: 3.1.0
+API version: 4.0
 
 This package is an advanced version of generated [Looker PHP SDK](https://github.com/alexkart/looker-php-sdk).
 It adds additional functionality and simplifies the work with the Looker API. You can interact with the whole API
@@ -80,9 +80,10 @@ $looker = new \Alexkart\Looker\Looker($config);
 ```
 The access token you provided will be used until it is valid and when it expires a new token will be
 requested automatically. You can check if the token has been renewed like this:
+
 ```php
-if ($looker->getConfig()->isAccessTokenRenewed()) {
-    $token = $looker->getConfig()->getAccessToken();
+if ($looker->getLookerConfig()->isAccessTokenRenewed()) {
+    $token = $looker->getLookerConfig()->getAccessToken();
 }
 ```
 If you want the access token to be stored into the persistent storage (database, cache, file, etc.)

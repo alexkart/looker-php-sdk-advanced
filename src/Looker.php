@@ -39,27 +39,29 @@ use Swagger\Client\Configuration;
 class Looker {
     private Client $authenticatedClient;
     private Configuration $apiConfig;
-    private LookerConfiguration $config;
+    private LookerConfiguration $lookerConfig;
+    private array $clientConfig;
 
-    public function __construct(LookerConfiguration $config) {
-        $this->config = $config;
+    public function __construct(LookerConfiguration $lookerConfig, array $clientConfig = []) {
+        $this->lookerConfig = $lookerConfig;
+        $this->clientConfig = $clientConfig;
         $this->login();
     }
 
     public function login(): void {
         $this->apiConfig = new Configuration();
-        $this->apiConfig->setHost($this->config->getHost());
+        $this->apiConfig->setHost($this->lookerConfig->getHost());
 
-        if ($this->config->getAccessToken() === '') {
+        if ($this->lookerConfig->getAccessToken() === '') {
             $apiInstance = new ApiAuthApi(
-                new Client(),
+                new Client($this->clientConfig),
                 $this->apiConfig
             );
 
             try {
-                $result = $apiInstance->login($this->config->getClientId(), $this->config->getClientSecret());
-                $this->config->setAccessToken($result->getAccessToken());
-                $this->config->setAccessTokenRenewed(true);
+                $result = $apiInstance->login($this->lookerConfig->getClientId(), $this->lookerConfig->getClientSecret());
+                $this->lookerConfig->setAccessToken($result->getAccessToken());
+                $this->lookerConfig->setAccessTokenRenewed(true);
             } catch (\Throwable $e) {
                 echo 'Exception when calling ApiAuthApi->login: ', $e->getMessage(), PHP_EOL;
             }
@@ -68,18 +70,18 @@ class Looker {
         $this->authenticatedClient = new Client([
             'verify' => false,
             'headers' => [
-                'Authorization' => 'token ' . $this->config->getAccessToken(),
+                'Authorization' => 'token ' . $this->lookerConfig->getAccessToken(),
             ],
         ]);
 
-        if ($this->config->isAccessTokenRenewed()) {
-            $this->config->storeAccessToken($this->config->getAccessToken());
-            $this->config->setAccessTokenRenewed(false);
+        if ($this->lookerConfig->isAccessTokenRenewed()) {
+            $this->lookerConfig->storeAccessToken($this->lookerConfig->getAccessToken());
+            $this->lookerConfig->setAccessTokenRenewed(false);
         }
     }
 
     public function invalidateAccessToken(): void {
-        $this->config->setAccessToken('');
+        $this->lookerConfig->setAccessToken('');
     }
 
     public function getAuthenticatedClient(): Client {
@@ -87,7 +89,7 @@ class Looker {
     }
 
     public function getAccessToken(): string {
-        return $this->config->getAccessToken();
+        return $this->lookerConfig->getAccessToken();
     }
 
     public function __get(string $name) {
@@ -96,7 +98,11 @@ class Looker {
         return new $class($this, $this->authenticatedClient, $this->apiConfig);
     }
 
-    public function getConfig(): LookerConfiguration {
-        return $this->config;
+    public function getLookerConfig(): LookerConfiguration {
+        return $this->lookerConfig;
+    }
+
+    public function getClientConfig(): array {
+        return $this->clientConfig;
     }
 }
